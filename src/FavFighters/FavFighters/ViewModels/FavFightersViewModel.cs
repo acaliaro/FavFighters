@@ -1,13 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using FavFighters.Models;
 using FavFighters.Services;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace FavFighters.ViewModels
 {
-    public class FavFightersViewModel : BindableObject
+    public class FavFightersViewModel : INotifyPropertyChanged
     {
-        ObservableCollection<Fighter> _fighters;
+        public ObservableCollection<Fighter> Fighters { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Command<Fighter> FavoriteCommand { get; set; }
 
@@ -21,20 +27,19 @@ namespace FavFighters.ViewModels
             });
         }
 
-        public ObservableCollection<Fighter> Fighters
-        {
-            get { return _fighters; }
-            set
-            {
-                _fighters = value;
-                OnPropertyChanged();
-            }
-        }
-
         void LoadFighters()
         {
-            var fighters = FakeFightersService.Instance.GetFighters();
-            Fighters = new ObservableCollection<Fighter>(fighters);
+            Fighters = new ObservableCollection<Fighter>(FakeFightersService.Instance.GetFighters());
+        }
+
+        internal void SetIsEnabled(Fighter swipedFighter)
+        {
+
+            if (swipedFighter != null)
+                Fighters.Where(o => o.Name != swipedFighter.Name).ForEach(o => o.IsEnabled = false); // I Disable all SwipeViews excepts the one selected
+            else
+                Fighters.Where(o => o.IsEnabled == false).ForEach(o => o.IsEnabled = true); // I enable all SwipeViews
+
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
+    x:Class="FavFighters.Views.FavFightersView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="FavFighters.Views.FavFightersView"
-    BackgroundColor="{StaticResource BackgroundColor}" x:Name="FightersPage">
+    x:Name="FightersPage"
+    BackgroundColor="{StaticResource BackgroundColor}">
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -73,35 +74,27 @@
 
             <DataTemplate x:Key="MessageTemplate">
                 <SwipeView
-                    HeightRequest="110">
+                    CloseRequested="SwipeView_CloseRequested"
+                    HeightRequest="110"
+                    IsEnabled="{Binding IsEnabled}"
+                    SwipeEnded="SwipeView_SwipeEnded">
                     <SwipeView.RightItems>
-                        <SwipeItems
-                            Mode="Reveal">
-                            <!-- Uncomment this to use the event way -->
-                            <!--<SwipeItemView Invoked="SwipeItemView_Invoked">-->
-                            <SwipeItemView Command="{Binding Path=BindingContext.FavoriteCommand, Source={x:Reference Name=FightersPage}}" CommandParameter="{Binding .}">
-                                <Grid
-                                    WidthRequest="120"
-                                    BackgroundColor="{StaticResource BackgroundColor}">
-                                    <BoxView
-                                        Style="{StaticResource SwipeItemBorderStyle}"/>
-                                    <Image
-                                        Source="star.png"
-                                        Style="{StaticResource SwipeItemIconStyle}"/>
-                                    <Label                                         
-                                        Text="Favourite"
-                                        Style="{StaticResource SwipeItemTextStyle}"/>
+                        <SwipeItems Mode="Reveal">
+                            <!--  Uncomment this to use the event way  -->
+                            <SwipeItemView Invoked="SwipeItemView_Invoked">
+                                <!--<SwipeItemView Command="{Binding Path=BindingContext.FavoriteCommand, Source={x:Reference Name=FightersPage}}" CommandParameter="{Binding .}"  >-->
+                                <Grid BackgroundColor="{StaticResource BackgroundColor}" WidthRequest="120">
+                                    <BoxView Style="{StaticResource SwipeItemBorderStyle}" />
+                                    <Image Source="star.png" Style="{StaticResource SwipeItemIconStyle}" />
+                                    <Label Style="{StaticResource SwipeItemTextStyle}" Text="Favourite" />
                                 </Grid>
                             </SwipeItemView>
                         </SwipeItems>
                     </SwipeView.RightItems>
                     <SwipeView.Content>
                         <Grid>
-                            <Frame
-                                Style="{StaticResource FrameStyle}">
-                                <Grid
-                                    VerticalOptions="Center"
-                                    RowSpacing="0">
+                            <Frame Style="{StaticResource FrameStyle}">
+                                <Grid RowSpacing="0" VerticalOptions="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="180" />
                                         <ColumnDefinition Width="*" />
@@ -111,30 +104,28 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Image
-                                        Grid.Column="0"
                                         Grid.Row="0"
                                         Grid.RowSpan="2"
+                                        Grid.Column="0"
                                         Source="{Binding Category}"
-                                        Style="{StaticResource CategoryStyle}"/>
+                                        Style="{StaticResource CategoryStyle}" />
                                     <Label
-                                        Grid.Column="0"
                                         Grid.Row="0"
-                                        Text="{Binding Tier}"
-                                        Style="{StaticResource TierStyle}"/>
-                                    <Label
                                         Grid.Column="0"
+                                        Style="{StaticResource TierStyle}"
+                                        Text="{Binding Tier}" />
+                                    <Label
                                         Grid.Row="1"
-                                        Text="{Binding Name}"
-                                        Style="{StaticResource NameStyle}"/>
+                                        Grid.Column="0"
+                                        Style="{StaticResource NameStyle}"
+                                        Text="{Binding Name}" />
                                 </Grid>
                             </Frame>
-                            <ScrollView
-                                IsEnabled="False"
-                                HorizontalOptions="End">
+                            <ScrollView HorizontalOptions="End" IsEnabled="False">
                                 <Image
-                                    HeightRequest="180"
                                     Aspect="AspectFill"
-                                    Source="{Binding Image}"/>
+                                    HeightRequest="180"
+                                    Source="{Binding Image}" />
                             </ScrollView>
                         </Grid>
                     </SwipeView.Content>
@@ -143,6 +134,7 @@
 
         </ResourceDictionary>
     </ContentPage.Resources>
+
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -151,17 +143,15 @@
             </Grid.RowDefinitions>
             <Label
                 Grid.Row="0"
-                Text="Fighters"
-                Style="{StaticResource TitleStyle}"/>
+                Style="{StaticResource TitleStyle}"
+                Text="Fighters" />
             <CollectionView
                 Grid.Row="1"
-                ItemsSource="{Binding Fighters}"
+                Margin="12,12,12,0"
                 ItemTemplate="{StaticResource MessageTemplate}"
-                Margin="12, 12, 12, 0">
+                ItemsSource="{Binding Fighters}">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout
-                        Orientation="Vertical"
-                        ItemSpacing="12"/>
+                    <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
         </Grid>
